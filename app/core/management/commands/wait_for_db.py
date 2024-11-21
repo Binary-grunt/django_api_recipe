@@ -1,4 +1,6 @@
 import time
+
+from django.db import connections
 from typing import Any
 from psycopg2 import OperationalError as Psycopg2Error
 from django.core.management.base import BaseCommand
@@ -13,8 +15,7 @@ class Command(BaseCommand):
 
         while db_up is False:
             try:
-                # Use `self.check()` to verify database connectivity
-                self.check()
+                connections['default'].cursor()
                 db_up = True  # Mark database as ready
             except (Psycopg2Error, OperationalError):
                 # Notify the user that the database is unavailable
