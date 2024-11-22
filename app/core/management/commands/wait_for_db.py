@@ -7,18 +7,20 @@ from django.db.utils import OperationalError
 
 
 class Command(BaseCommand):
-    """Django command to pause execution until the database is available."""
-
     def handle(self, *args: tuple[Any, ...], **options: dict[str, Any]) -> None:
-        self.stdout.write('Waiting for database...')
-        db_up = False
+        """ Main logic of the `wait_for_db` command. It waits until the database is ready. """
+        self.stdout.write('Waiting for database...')  # Notify the user that the command is running
+        db_up: bool = False
 
-        while not db_up:
+        while db_up is False:
             try:
+                # Attempt to ensure connection to the default database
                 connections['default'].ensure_connection()
-                db_up = True
+                db_up = True  # Mark database as ready
             except (Psycopg2Error, OperationalError):
+                # Notify the user that the database is unavailable
                 self.stdout.write('Database unavailable, waiting 1 second...')
-                time.sleep(1)
+                time.sleep(1)  # Wait before retrying
 
+        # Notify the user that the database is available
         self.stdout.write(self.style.SUCCESS('Database available!'))

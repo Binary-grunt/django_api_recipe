@@ -2,11 +2,11 @@ from unittest.mock import patch, MagicMock
 from psycopg2 import OperationalError as Psycopg2Error
 from django.core.management import call_command
 from django.db.utils import OperationalError
-from django.test import TestCase
+from django.test import SimpleTestCase
 
 
 @patch('django.db.connections')
-class DBCommandTests(TestCase):
+class DBCommandTests(SimpleTestCase):
     # def test_wait_for_db_ready(self, patched_connections: MagicMock) -> None:
     #     """Test that the command finishes immediately if the database is ready."""
     #     # Mock the database connection to behave as if the database is ready
