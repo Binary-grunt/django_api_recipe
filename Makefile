@@ -1,4 +1,4 @@
-.PHONY: flake, startproject, test, migrate, createsuperuser
+.PHONY: flake, startproject, test, shell-d, migration, migrate, createsuperuser
 
 # commands to run linting
 flake:
@@ -11,7 +11,13 @@ startproject:
 # commands to run tests
 test:
 	@docker-compose run --rm app sh -c "python manage.py test"
+# commands to run tests
+shell-d:
+	@docker-compose run --rm app sh -c "python manage.py shell"
 
+# commands to run migrations
+migration:
+	@docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py makemigrations"  
 # commands to run migrations
 migrate:
 	@docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py migrate"  
